@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PhoneNumberValidator;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -29,6 +30,7 @@ class ContactRequest extends FormRequest
             'full_name' => ['required', 'string'],
             'email' => ['nullable', 'email:rfc,dns'],
             'phone' => ['required', 'numeric', 'digits_between:10,15',
+                new PhoneNumberValidator($request->country_code),
                 Rule::unique('contacts')->where(function ($q) use ($request) {
                     return $q->where('dial_code', $request->dial_code)
                         ->where('phone', $request->phone);
