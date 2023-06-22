@@ -20,6 +20,7 @@ class ContactListResource extends JsonResource
             'email' => $this->email,
             'dial_code' => $this->dial_code,
             'phone' => $this->phone,
+            'country_code' => $this->country_code,
         ];
     }
 }
