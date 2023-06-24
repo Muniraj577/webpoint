@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'contact'], function (){
    Route::get('', [ContactController::class, "index"]);
+   Route::get('detail/{id}', [ContactController::class, "getContactDetail"]);
    Route::post('store', [ContactController::class, "store"]);
    Route::put('update/{id}', [ContactController::class, "update"]);
    Route::delete('delete/{id}', [ContactController::class, "destroy"]);

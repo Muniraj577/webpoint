@@ -6,6 +6,7 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import store from "./store";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -13,10 +14,16 @@ import { createApp } from 'vue';
  * to use in your application's views. An example is included for you.
  */
 
+window.store = store;
+
 const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
+import ContactList from "./components/contact/ContactList.vue";
+import ContactForm from "./components/contact/ContactForm.vue";
 app.component('example-component', ExampleComponent);
+app.component('contact-list', ContactList);
+app.component('contact-form', ContactForm);
 
 /**
  * The following block of code may be used to automatically register your
@@ -36,4 +43,5 @@ app.component('example-component', ExampleComponent);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
+app.use(store);
 app.mount('#app');

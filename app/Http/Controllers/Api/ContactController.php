@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
+use App\Http\Resources\ContactDetailResource;
 use App\Http\Resources\ContactListResource;
 use App\Repository\ContactRepository;
 use App\Traits\ApiResponse;
@@ -44,6 +45,16 @@ class ContactController extends Controller
             return $this->sendSuccessResponse($contact, Response::HTTP_OK, 'Contact created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
+            return $this->sendErrorResponse(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+        }
+    }
+
+    public function getContactDetail($id)
+    {
+        try {
+            $contact = $this->contactRepository->getById($id);
+            return $this->sendSuccessResponse($contact, Response::HTTP_OK, 'Contact fetched successfully');
+        } catch (\Exception $e){
             return $this->sendErrorResponse(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
     }

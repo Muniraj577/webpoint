@@ -6,7 +6,6 @@
 <script src="{{ asset('assets/admin/dist/js/adminlte.js') }}"></script>
 =<script src="{{ asset('assets/js/toastr.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery-confirm.min.js') }}"></script>
-<script src="{{ asset('assets/js/jquery-ui.js') }}"></script>
 
 @vite(['resources/js/app.js'])
 

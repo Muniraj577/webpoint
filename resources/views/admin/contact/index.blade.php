@@ -18,14 +18,17 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title float-right">
-                                <a href="javascript:void(0);" class="btn btn-primary">
+                                <a href="javascript:void(0);" class="btn btn-primary" onclick="window.test.showModal()">
                                     <i class="fas fa-plus"></i> Add Contact
                                 </a>
                             </div>
                         </div>
-
+                        <contact-list/>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+{{--                @include('admin.modals.contactFormModal')--}}
             </div>
         </div>
     </section>
