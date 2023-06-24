@@ -1,11 +1,14 @@
 <template>
     <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="contactModalLabel">{{ contact.id == null ? 'Add Contact' : 'Edit Contact' }}</h5>
+            <h5 class="modal-title" id="contactModalLabel">{{
+                    contact.id == null ? 'Add Contact' : 'Edit Contact'
+                }}</h5>
             <button type="button" class="close" @click="close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        {{telOptions}}
         <div class="modal-body">
             <form ref="contactForm">
                 <div class="row">
@@ -47,6 +50,7 @@
                                             v-model="contact.phone"
                                             ref="phoneNumber"
                                             @on-input="onNumberChange"
+                                            :key="contact.country_code"
                                             :defaultCountry="contact.country_code"
                                         ></vue-tel-input>
                                         <span class="require phone text-danger"
@@ -78,7 +82,8 @@ export default {
     props: [
         'closeModal',
         'bModal',
-        'contact'
+        'contact',
+        'telOptions'
     ],
     mixins: [
         commonMixin,
@@ -86,28 +91,6 @@ export default {
     data() {
         return {
             changeNumber: false,
-            telOptions: {
-                autoFormat: true,
-                defaultCountry: "",
-                dropdownOptions: {
-                    showFlags: true,
-                    showDialCode: true,
-                    showDialCodeInList: true,
-                    tabindex: 0,
-                    ignoredCountries: [],
-                },
-                inputOptions: {
-                    autocomplete: "on",
-                    "aria-describedby": "",
-                    id: "",
-                    maxlength: 25,
-                    name: "telephone",
-                    placeholder: "Enter a phone number",
-                    tabindex: 0,
-                    type: "tel",
-                },
-                mode: "auto",
-            },
         }
     },
     components: {
@@ -158,7 +141,7 @@ export default {
         },
 
         save() {
-            this.saveFormData(this.contact, this.bModal, this.$refs.contactForm);
+            this.saveFormData(this.contact, this.bModal, this.resetForm());
         }
     }
 }

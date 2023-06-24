@@ -31,7 +31,7 @@
     <div class="modal fade" id="contactModal" tabindex="-1" role="dialog"
          aria-labelledby="contactModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <ContactForm ref="contactModal" :contact="contact" :closeModal="closeModal" :bModal="myModal"/>
+            <ContactForm ref="contactModal" :telOptions="telOptions" :contact="contact" :closeModal="closeModal" :bModal="myModal"/>
         </div>
     </div>
 </template>
@@ -39,6 +39,7 @@
 import {commonMixin} from "../../CommonMixin.js";
 import ContactForm from "./ContactForm.vue";
 import {mapGetters} from "vuex";
+import {apiClient} from "../../services/Api.js";
 
 export default {
     name: "ContactList",
@@ -63,6 +64,28 @@ export default {
                 dial_code: null,
                 country_code: null,
             },
+            telOptions: {
+                autoFormat: true,
+                defaultCountry: "",
+                dropdownOptions: {
+                    showFlags: true,
+                    showDialCode: true,
+                    showDialCodeInList: true,
+                    tabindex: 0,
+                    ignoredCountries: [],
+                },
+                inputOptions: {
+                    autocomplete: "on",
+                    "aria-describedby": "",
+                    id: "",
+                    maxlength: 25,
+                    name: "telephone",
+                    placeholder: "Enter a phone number",
+                    tabindex: 0,
+                    type: "tel",
+                },
+                mode: "auto",
+            },
         }
     },
 
@@ -78,7 +101,6 @@ export default {
         window.test = this;
         this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
         this.fetchData();
-        this.getContactDetail(1)
     },
 
     methods: {
@@ -89,19 +111,41 @@ export default {
 
         showModal(id = null) {
             if (id !== null) {
-                this.fetchDetail(id);
-                this.contact = {
-                    id: this.detail.id,
-                    full_name: this.detail.full_name,
-                    email: this.detail.email,
-                    phone: this.detail.phone,
-                    dial_code: this.detail.dial_code,
-                    country_code: this.detail.country_code,
-                };
+                apiClient.get(`contact/detail/${id}`).then(res => {
+                    let detail = res.data.data;
+                    this.contact = {
+                        id: detail.id,
+                        full_name: detail.full_name,
+                        email: detail.email,
+                        phone: detail.phone,
+                        dial_code: detail.dial_code,
+                        country_code: detail.country_code,
+                    };
+                    this.$nextTick(() => {
+                        this.telOptions = {
+                            ...this.telOptions,
+                            defaultCountry: detail.country_code,
+                        };
+                    })
+
+                    this.modalInstance = true;
+                    this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
+                    this.myModal.show();
+                })
+
+                // this.fetchDetail(id);
+                // this.contact = {
+                //     full_name: this.detail.full_name,
+                //     email: this.detail.email,
+                //     phone: this.detail.phone,
+                //     dial_code: this.detail.dial_code,
+                //     country_code: this.detail.country_code,
+                // };
+            } else {
+                this.modalInstance = true;
+                this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
+                this.myModal.show();
             }
-            this.modalInstance = true;
-            this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
-            this.myModal.show();
         },
 
         resetContact() {

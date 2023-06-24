@@ -64,7 +64,7 @@ export const commonMixin = {
                         modal.hide();
                     }
                     if (formRef !== null) {
-                        formRef.reset();
+                        formRef();
                     }
                     this.fetchData();
                 })
