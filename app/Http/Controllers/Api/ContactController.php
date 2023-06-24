@@ -29,7 +29,7 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         try {
-            $contacts = $this->contactRepository->filter($request);
+            $contacts = $this->contactRepository->filter($request, 'desc');
             return $contacts;
 //            $contacts = Contact::when(!blank($request->title) && $request->title !== null, function ($q) use($request){
 //                $q->where('full_name', 'LIKE', "%".$request->title."%");

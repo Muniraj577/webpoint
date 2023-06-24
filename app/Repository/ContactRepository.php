@@ -14,17 +14,18 @@ class ContactRepository implements ContactInterface
         $this->responseResource = $responseResource;
     }
 
-    public function getAll()
+    public function getAll($orderBy = 'desc')
     {
-        return $this->responseResource::collection(Contact::get());
+        return $this->responseResource::collection(Contact::orderBy('id', $orderBy)->get());
     }
 
-    public function filter($request)
+    public function filter($request, $orderBy = 'desc')
     {
         $contacts = Contact::query();
-        $contacts = $contacts->when(!blank($request->title) && $request->title !== null, function ($q) use($request){
-            return $q->where('full_name', 'LIKE', '%'.$request->title.'%');
-        })->paginate(10);
+        $contacts = $contacts->when(!blank($request->title) && $request->title !== null, function ($q) use ($request) {
+            return $q->where('full_name', 'LIKE', '%' . $request->title . '%');
+        })->orderBy('id', 'desc')
+            ->paginate(10);
         $contacts->getCollection()->transform(function ($item, $key) use ($contacts) {
             $item->serial_number = $contacts->firstItem() + $key;
             return $item;
