@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Rubik:wght@300;400&display=swap");
+
 body {
     font-size: 0.96rem;
     /*font-family: 'Rubik', sans-serif;*/
@@ -8,12 +9,16 @@ body {
     color: blue;
 }
 
-a.blue:hover{
-    color:blue;
+a.blue:hover {
+    color: blue;
 }
 
 .red {
     color: red;
+}
+
+a.red:hover {
+    color: red;;
 }
 
 .imageSize {
@@ -196,7 +201,7 @@ a.blue:hover{
     border-radius: 0;
 }
 
-.create-card>.card-body {
+.create-card > .card-body {
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -304,33 +309,33 @@ th {
     color: #241e20;
 }
 
-[class*="sidebar-dark-"] .nav-treeview>.nav-item>.nav-link {
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link {
     color: #fff;
     padding: 0.5rem 2.5rem;
 }
 
-.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active,
-.sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
     background-color: #241e20;
     color: #fff;
 }
 
-[class*="sidebar-dark-"] .nav-sidebar>.nav-item.menu-open>.nav-link,
-[class*="sidebar-dark-"] .nav-sidebar>.nav-item:hover>.nav-link,
-[class*="sidebar-dark-"] .nav-sidebar>.nav-item>.nav-link:focus {
+[class*="sidebar-dark-"] .nav-sidebar > .nav-item.menu-open > .nav-link,
+[class*="sidebar-dark-"] .nav-sidebar > .nav-item:hover > .nav-link,
+[class*="sidebar-dark-"] .nav-sidebar > .nav-item > .nav-link:focus {
     background-color: #241e20;
     color: #fff;
 }
 
-[class*="sidebar-dark-"] .nav-treeview>.nav-item>.nav-link:focus,
-[class*="sidebar-dark-"] .nav-treeview>.nav-item>.nav-link:hover {
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link:focus,
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link:hover {
     background-color: #241e20;
     color: #fff;
 }
 
-[class*="sidebar-dark-"] .nav-treeview>.nav-item>.nav-link.active,
-[class*="sidebar-dark-"] .nav-treeview>.nav-item>.nav-link.active:focus,
-[class*="sidebar-dark-"] .nav-treeview>.nav-item>.nav-link.active:hover {
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active,
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active:focus,
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link.active:hover {
     background-color: #241e20;
     color: #fff;
 }
@@ -346,7 +351,7 @@ th {
 
 .btn-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active,
-.show>.btn-primary.dropdown-toggle {
+.show > .btn-primary.dropdown-toggle {
     background-color: #336ea0;
     border-color: #336ea0;
 }

@@ -8,7 +8,6 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        {{telOptions}}
         <div class="modal-body">
             <form ref="contactForm">
                 <div class="row">

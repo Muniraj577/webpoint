@@ -11,16 +11,20 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(user, index) in all" :key="index">
-                <td>{{ user.id }}</td>
-                <td>{{ user.full_name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.phone }}</td>
+            <tr v-for="(contact, index) in all" :key="index">
+                <td>{{ contact.id }}</td>
+                <td>{{ contact.full_name }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.phone }}</td>
                 <td>
                     <div class="d-inline-flex">
-                        <a href="javascript:void(0);" @click="showModal(user.id)"
+                        <a href="javascript:void(0);" @click="showModal(contact.id)"
                            class="btn blue btn-sm" title="Edit Contact">
                             <i class="fa fa-edit iCheck"></i>
+                        </a>
+                        <a href="javascript:void(0);" @click="deleteContact(contact.id)"
+                           class="btn red btn-sm" title="Delete Contact">
+                            <i class="fa fa-trash iCheck"></i>
                         </a>
                     </div>
                 </td>
@@ -31,7 +35,8 @@
     <div class="modal fade" id="contactModal" tabindex="-1" role="dialog"
          aria-labelledby="contactModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <ContactForm ref="contactModal" :telOptions="telOptions" :contact="contact" :closeModal="closeModal" :bModal="myModal"/>
+            <ContactForm ref="contactModal" :telOptions="telOptions" :contact="contact" :closeModal="closeModal"
+                         :bModal="myModal"/>
         </div>
     </div>
 </template>
@@ -107,6 +112,20 @@ export default {
         closeModal() {
             this.myModal.hide();
             this.resetContact();
+        },
+
+        deleteContact(id) {
+            let c = confirm('Are you sure?')
+            if (c == false) {
+                alert('You denied')
+            } else {
+                apiClient.delete(`contact/delete/${id}`).then(res => {
+                    toastr.error(res.data.message);
+                    this.fetchData();
+                }).catch(err => {
+                    toastr.error(err);
+                })
+            }
         },
 
         showModal(id = null) {

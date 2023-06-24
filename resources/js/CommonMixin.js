@@ -60,6 +60,8 @@ export const commonMixin = {
             console.log(url);
             this.$store.dispatch(url, formdata.id)
                 .then(res => {
+                    console.log(res);
+                    toastr.success(res.data.message);
                     if (modal !== null && modal instanceof bootstrap.Modal) {
                         modal.hide();
                     }
