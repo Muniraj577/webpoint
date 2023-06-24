@@ -23,7 +23,7 @@ php artisan migrate
 ```bash
 php artisan serve
 
-npm run start:dev
+npm run dev
 ```
 
 ## Contributing
