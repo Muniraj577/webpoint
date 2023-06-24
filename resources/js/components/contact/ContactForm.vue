@@ -19,7 +19,7 @@
                                         <label for="name">Full Name</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" v-model="contact.full_name" ref="contactPhone"
+                                        <input type="text" v-model="contact.full_name"
                                                class="form-control"
                                                id="fullName">
                                         <span class="require full_name text-danger" ref="full_name"></span>
@@ -32,7 +32,7 @@
                                         <label for="name">Email</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" v-model="contact.email" ref="contactEmail"
+                                        <input type="text" v-model="contact.email"
                                                class="form-control"
                                                id="email">
                                         <span class="require email text-danger" ref="email"></span>
@@ -97,23 +97,23 @@ export default {
     },
 
     created() {
-        this.stateName = "contact";
+
     },
 
     mounted() {
+        this.stateName = "contact";
         this.changeNumber = false;
     },
 
     methods: {
         close() {
             this.closeModal();
-            // this.$refs.contactForm.reset();
             this.resetForm();
-            document.querySelectorAll('.require').forEach(element => element.style.display = 'none');
         },
 
         resetForm() {
             this.$refs.contactForm.reset();
+            document.querySelectorAll('.require').forEach(element => element.style.display = 'none');
         },
 
         onNumberChange(number, phoneObject) {
@@ -140,7 +140,7 @@ export default {
         },
 
         save() {
-            this.saveFormData(this.contact, this.bModal, this.resetForm());
+            this.saveFormData(this.contact, this.bModal, this.resetForm);
         }
     }
 }

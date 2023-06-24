@@ -12,6 +12,18 @@ export const commonMixin = {
             }
         },
 
+        dataLength: {
+          get(){
+              return this.$store.state[this.stateName].dataLength;
+          }
+        },
+
+        page:{
+          get(){
+              return this.$store.state[this.stateName].page;
+          }
+        },
+
         detail: {
             get() {
                 return this.$store.state[this.stateName].detail;
@@ -57,10 +69,8 @@ export const commonMixin = {
             if (formdata.id !== undefined && formdata.id !== null){
                 url = `${this.stateName}/update`;
             }
-            console.log(url);
             this.$store.dispatch(url, formdata.id)
                 .then(res => {
-                    console.log(res);
                     toastr.success(res.data.message);
                     if (modal !== null && modal instanceof bootstrap.Modal) {
                         modal.hide();
@@ -72,6 +82,7 @@ export const commonMixin = {
                 })
                 .catch(err => {
                     if (err.response) {
+                        console.log(err.response)
                         const response = err.response.data;
                         if (Object.keys(response.errors).length > 0) {
                             $(".require").css('display', 'none');

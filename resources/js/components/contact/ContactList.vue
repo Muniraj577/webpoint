@@ -1,6 +1,14 @@
 <template>
     <div class="card-body">
-        <table id="Admin" class="table table-responsive-xl">
+        <div class="row card-title col-md-9 float-right">
+            <div class="col-5">
+                <input type="text" v-model="title" class="form-control" placeholder="Search by name">
+            </div>
+            <div class="col-4">
+                <button class="btn btn-block btn-primary" @click="search">Search</button>
+            </div>
+        </div>
+        <table class="table table-responsive-xl">
             <thead>
             <tr>
                 <th>S.N</th>
@@ -11,8 +19,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(contact, index) in all" :key="index">
-                <td>{{ contact.id }}</td>
+            <tr v-for="(contact, index) in all.data" :key="index">
+                <td>{{ contact.serial_number }}</td>
                 <td>{{ contact.full_name }}</td>
                 <td>{{ contact.email }}</td>
                 <td>{{ contact.phone }}</td>
@@ -29,8 +37,16 @@
                     </div>
                 </td>
             </tr>
+            <tr v-if="all.data?.length === 0">
+                No results found
+            </tr>
             </tbody>
         </table>
+        <div class="pagination_div">
+            <div class="pagination-centered">
+                <Bootstrap4Pagination :data="all" :limit="2" @pagination-change-page="fetchContact"/>
+            </div>
+        </div>
     </div>
     <div class="modal fade" id="contactModal" tabindex="-1" role="dialog"
          aria-labelledby="contactModalLabel" aria-hidden="true">
@@ -45,6 +61,7 @@ import {commonMixin} from "../../CommonMixin.js";
 import ContactForm from "./ContactForm.vue";
 import {mapGetters} from "vuex";
 import {apiClient} from "../../services/Api.js";
+import {Bootstrap4Pagination} from "laravel-vue-pagination";
 
 export default {
     name: "ContactList",
@@ -54,13 +71,15 @@ export default {
     ],
 
     components: {
-        ContactForm
+        ContactForm,
+        Bootstrap4Pagination,
     },
 
     data() {
         return {
             myModal: null,
             modalInstance: false,
+            title: null,
             contact: {
                 id: null,
                 full_name: null,
@@ -105,10 +124,26 @@ export default {
     mounted() {
         window.test = this;
         this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
-        this.fetchData();
+        this.fetchContact();
     },
 
     methods: {
+        fetchContact(page = 1) {
+            this.$store.commit('contact/setPage', page);
+            this.fetchData();
+        },
+        search() {
+            this.$store.commit('contact/setQuery', this.title)
+            this.$store.commit('contact/setPage', 1)
+            this.$store.dispatch('contact/fetchData').then((res) => {
+                let dataLen = res.data.data.length;
+                if (dataLen === 0) {
+                    alert('No results found. Add a new user.')
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        },
         closeModal() {
             this.myModal.hide();
             this.resetContact();
@@ -117,7 +152,7 @@ export default {
         deleteContact(id) {
             let c = confirm('Are you sure?')
             if (c == false) {
-                alert('You denied')
+                toastr.error('You denied the delete operation.')
             } else {
                 apiClient.delete(`contact/delete/${id}`).then(res => {
                     toastr.error(res.data.message);
@@ -140,17 +175,10 @@ export default {
                         dial_code: detail.dial_code,
                         country_code: detail.country_code,
                     };
-                    this.$nextTick(() => {
-                        this.telOptions = {
-                            ...this.telOptions,
-                            defaultCountry: detail.country_code,
-                        };
-                    })
-
-                    this.modalInstance = true;
-                    this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
-                    this.myModal.show();
                 })
+
+                this.modalInstance = true;
+                this.myModal.show();
 
                 // this.fetchDetail(id);
                 // this.contact = {
@@ -162,7 +190,6 @@ export default {
                 // };
             } else {
                 this.modalInstance = true;
-                this.myModal = new bootstrap.Modal(document.getElementById('contactModal'));
                 this.myModal.show();
             }
         },

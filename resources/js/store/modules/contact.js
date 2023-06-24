@@ -6,6 +6,8 @@ const state = {
     model: 'contact',
     modelData: {},
     detail: {},
+    dataLength: 0,
+    page: 1,
 }
 
 const getters = {
@@ -13,17 +15,22 @@ const getters = {
     query: state => state.query,
     contact: state => state.contact,
     detail: state => state.detail,
+    dataLength: state => state.dataLength,
+    page: state => state.page,
 }
 
 const actions = {
     fetchData({commit, state}) {
         let query = state.query;
+        let page = state.page;
         return new Promise((resolve, reject) => {
-            apiClient.get(state.model + "?query=" + query)
+            apiClient.get(state.model + "?page=" + page + "&title=" + query)
                 .then(res => {
                     let response = res.data;
                     if (response.data) {
-                        commit("setAll", response.data)
+                        commit("setDataLength", response.data.length);
+                        commit("setAll", response);
+                        commit("setPage", page);
                     }
                     resolve(res);
                 })
@@ -55,6 +62,7 @@ const actions = {
         return new Promise((resolve, reject) => {
             apiClient.post(`${state.model}/store`, state.modelData)
                 .then(response => {
+                    console.log(response);
                     resolve(response);
                 })
                 .catch(err => {
@@ -80,12 +88,24 @@ const mutations = {
         state.all = items;
     },
 
+    setDataLength(state, len){
+      state.dataLength = len;
+    },
+
     setModalData(state, data) {
         state.modelData = data;
     },
 
     setDetail(state, data) {
         state.detail = data;
+    },
+
+    setQuery(state, query){
+        state.query = query;
+    },
+
+    setPage(state, page){
+        state.page = page;
     }
 }
 

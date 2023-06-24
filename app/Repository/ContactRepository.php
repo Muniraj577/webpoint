@@ -19,6 +19,19 @@ class ContactRepository implements ContactInterface
         return $this->responseResource::collection(Contact::get());
     }
 
+    public function filter($request)
+    {
+        $contacts = Contact::query();
+        $contacts = $contacts->when(!blank($request->title) && $request->title !== null, function ($q) use($request){
+            return $q->where('full_name', 'LIKE', '%'.$request->title.'%');
+        })->paginate(10);
+        $contacts->getCollection()->transform(function ($item, $key) use ($contacts) {
+            $item->serial_number = $contacts->firstItem() + $key;
+            return $item;
+        });
+        return $this->responseResource::collection($contacts)->response()->setStatusCode(200);
+    }
+
     public function save($data)
     {
         $input = $data->except("_token");

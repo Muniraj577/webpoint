@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContactRequest;
-use App\Http\Resources\ContactDetailResource;
 use App\Http\Resources\ContactListResource;
+use App\Models\Contact;
 use App\Repository\ContactRepository;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -26,11 +26,17 @@ class ContactController extends Controller
         $this->contactRepository = new ContactRepository($this->responseResource);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $contacts = $this->contactRepository->getAll();
-            return $this->sendSuccessResponse($contacts, Response::HTTP_OK, 'Contacts fetched successfully');
+            $contacts = $this->contactRepository->filter($request);
+            return $contacts;
+//            $contacts = Contact::when(!blank($request->title) && $request->title !== null, function ($q) use($request){
+//                $q->where('full_name', 'LIKE', "%".$request->title."%");
+//            })->paginate(10);
+//            return ContactListResource::collection($contacts)
+//                ->response()
+//                ->setStatusCode(200);
         } catch (\Exception $e) {
             return $this->sendErrorResponse(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
         }
