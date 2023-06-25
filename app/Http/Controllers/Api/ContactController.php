@@ -70,6 +70,9 @@ class ContactController extends Controller
         try {
             DB::beginTransaction();
             $contact = $this->contactRepository->update($request, $id);
+            if (!$contact){
+                return $this->sendErrorResponse(Response::HTTP_NOT_FOUND, 'Contact not found');
+            }
             DB::commit();
             return $this->sendSuccessResponse($contact, Response::HTTP_OK, "Contact updated successfully");
         } catch (\Exception $e){
@@ -83,7 +86,10 @@ class ContactController extends Controller
         try {
             $data = [];
             DB::beginTransaction();
-            $this->contactRepository->delete($id);
+            $contact = $this->contactRepository->delete($id);
+            if (!$contact){
+                return $this->sendErrorResponse(Response::HTTP_NOT_FOUND, 'Contact not found');
+            }
             DB::commit();
             return $this->sendSuccessResponse($data, Response::HTTP_OK, "Contact deleted successfully");
         } catch (\Exception $e){

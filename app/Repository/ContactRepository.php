@@ -24,7 +24,7 @@ class ContactRepository implements ContactInterface
         $contacts = Contact::query();
         $contacts = $contacts->when(!blank($request->title) && $request->title !== null, function ($q) use ($request) {
             return $q->where('full_name', 'LIKE', '%' . $request->title . '%');
-        })->orderBy('id', 'desc')
+        })->orderBy('id', $orderBy)
             ->paginate(10);
         $contacts->getCollection()->transform(function ($item, $key) use ($contacts) {
             $item->serial_number = $contacts->firstItem() + $key;
@@ -53,16 +53,22 @@ class ContactRepository implements ContactInterface
     public function update($data, $id)
     {
         $contact = $this->find($id);
-        $input = $data->except("_token");
-        $contact->update($input);
-        return $this->getById($id);
+        if ($contact) {
+            $input = $data->except("_token");
+            $contact->update($input);
+            return $this->getById($id);
 //        return $contact->refresh(); // return collection after update
+        }
+        return false;
     }
 
     public function delete($id)
     {
         $contact = $this->find($id);
-        return $contact->delete();
+        if ($contact) {
+            return $contact->delete();
+        }
+        return false;
     }
 
 }
