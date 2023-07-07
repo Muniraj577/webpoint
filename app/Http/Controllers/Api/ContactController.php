@@ -28,6 +28,15 @@ class ContactController extends Controller
 
     public function index(Request $request)
     {
+//        $ar = [
+//            ['Hello', 'World', 'JavaScript'],
+//            ['JavaScript', 'Program']
+//        ];
+//        $newarr = array_merge([], ...$ar);
+//        $count = array_count_values($newarr);
+//        return array_filter($newarr, function ($value) use($count){
+//           return $count[$value] < 2;
+//        });
         try {
             $contacts = $this->contactRepository->filter($request, 'desc');
             return $contacts;
@@ -44,7 +53,15 @@ class ContactController extends Controller
 
     public function store(ContactRequest $request)
     {
+//        dd($request->email, explode('@', 'gmail.com'));
+//        dd(list($email, $domain) = explode('@', $request->email));
         try {
+            $emailArray = ['gmail.com', 'webpoint.io'];
+            list($email, $domain) = explode('@', $request->email);
+            if (!in_array($domain, $emailArray)){
+//            if ($domain !== 'webpoint.io'){
+                return $this->sendErrorResponse(Response::HTTP_BAD_REQUEST, "The domain $domain is not supported");
+            }
             DB::beginTransaction();
             $contact = $this->contactRepository->save($request);
             DB::commit();
@@ -95,6 +112,46 @@ class ContactController extends Controller
         } catch (\Exception $e){
             DB::rollBack();
             return $this->sendErrorResponse(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+        }
+    }
+
+    private function getPrimeNumbers($n)
+    {
+        $primeNumbers = [];
+        for ($i = 1; $i <= $n - 1; $i++){
+            if ($i % ($i + $n - 1) != 0 ){
+                $primeNumbers[] = $i;
+            }
+        }
+        return $primeNumbers;
+    }
+
+//    multiple of 7 'Cocola'
+// multiple of 3 7 5 'FizBuzz Cocola';
+    public function getText($n){
+        for ($i = 1; $i <= $n; $i++){
+            if ($i % 3 == 0 && $i % 5 == 0 && $i%7==0){
+                echo 'FizzBuzz Cocola' .$i ;
+                echo '</br>';
+                echo PHP_EOL;
+            }elseif ($i % 3 == 0 && $i % 5 == 0){
+                echo 'FizzBuzz' .$i ;
+                echo '</br>';
+                echo PHP_EOL;
+            } elseif ($i % 5 == 0 ){
+                echo 'Buzz' . $i;
+                echo '</br>';
+                echo PHP_EOL;
+            } elseif ($i % 3 == 0 ){
+                echo 'Fizz' . $i;
+                echo '</br>';
+                echo PHP_EOL;
+            }
+            elseif ($i % 7 == 0 ){
+                echo 'Cocola' . $i;
+                echo '</br>';
+                echo PHP_EOL;
+            }
         }
     }
 }
